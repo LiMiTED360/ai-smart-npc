@@ -4,14 +4,11 @@ public class Trigger {
     private String command;
     private String description;
     private Runnable onActivation;
-    private boolean oneTimeUse;
-    private boolean usedable = false;
 
-    public Trigger(String command, String description, Runnable onActivation, boolean oneTimeUse) {
+    public Trigger(String command, String description, Runnable onActivation) {
         this.command = command;
         this.description = description;
         this.onActivation = onActivation;
-        this.oneTimeUse = oneTimeUse;
     }
 
     public String getCommand() {
@@ -31,17 +28,5 @@ public class Trigger {
     }
     public void setOnActivation(Runnable onActivation) {
         this.onActivation = onActivation;
-    }
-    public boolean isOneTimeUse() {
-        return oneTimeUse;
-    }
-    public void setOneTimeUse(boolean oneTimeUse) {
-        this.oneTimeUse = oneTimeUse;
-    }
-    public boolean isUsedable() {
-        return usedable;
-    }
-    public void setUsedable(boolean usedable) {
-        this.usedable = usedable;
     }
 }

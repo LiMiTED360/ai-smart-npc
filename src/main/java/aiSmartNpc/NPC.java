@@ -9,46 +9,27 @@ public class NPC {
     private String descriptionLocation;
     private String descriptionTask;
 
-    private List<Trigger> triggers;
+    private List<Trigger> triggers = new ArrayList<>();
 
-    private NPCConfig npcConfig;
 
-    private List<String> likedPlyers = Collections.synchronizedList(new ArrayList<>());
-    private List<String> dislikedPlyers = Collections.synchronizedList(new ArrayList<>());
-
-    private NPC(String name, String mood, String descriptionNPC, String descriptionLocation, String descriptionTask, NPCConfig npcConfig) {
+    private NPC(String name, String mood, String descriptionNPC, String descriptionLocation, String descriptionTask) {
         this.name = name;
         this.mood = mood;
         this.descriptionNPC = descriptionNPC;
         this.descriptionLocation = descriptionLocation;
         this.descriptionTask = descriptionTask;
-        this.npcConfig = npcConfig;
     }
 
-    public NPC makeSimpleNPC(String name, Mood mood, String description) {
-        return new NPC(name, mood.getDescription(), description, "", "", new NPCConfig());
+    public static NPC makeSimpleNPC(String name, Mood mood, String description) {
+        return new NPC(name, mood.getDescription(), description, null, null);
     }
 
-    public NPC makeNormalNPC(String name, Mood mood, String description, NPCConfig npcConfig) {
-        return new NPC(name, mood.getDescription(), description, "", "", npcConfig);
+    public static NPC makeNormalNPC(String name, Mood mood, String description, String descriptionTask) {
+        return new NPC(name, mood.getDescription(), description, descriptionTask, null);
     }
 
-    private NPC makeDetailedNPC(String name, String cusomMood, String descriptionNPC, String descriptionLocation, String descriptionTask, NPCConfig npcConfig) {
-        return new NPC (name, cusomMood, descriptionNPC, descriptionLocation, descriptionTask, npcConfig);
-    }
-
-    public void addPlayerToLikedPlyers(String player) {
-        likedPlyers.add(player);
-        if (likedPlyers.size() > npcConfig.getMaxPlayerListSize()) {
-            likedPlyers.removeFirst();
-        }
-    }
-
-    public void addPlayerToDislikedPlyers(String player) {
-        dislikedPlyers.add(player);
-        if (dislikedPlyers.size() > npcConfig.getMaxPlayerListSize()) {
-            dislikedPlyers.removeFirst();
-        }
+    private static NPC makeDetailedNPC(String name, String cusomMood, String descriptionNPC, String descriptionTask, String descriptionLocation) {
+        return new NPC (name, cusomMood, descriptionNPC, descriptionLocation, descriptionTask);
     }
 
     public Conversation startConversation(String playerName, String url, String aiModel) {
@@ -90,24 +71,6 @@ public class NPC {
     }
     public void setTriggers(List<Trigger> triggers) {
         this.triggers = triggers;
-    }
-    public NPCConfig getNpcConfig() {
-        return npcConfig;
-    }
-    public void setNpcConfig(NPCConfig npcConfig) {
-        this.npcConfig = npcConfig;
-    }
-    public List<String> getLikedPlyers() {
-        return likedPlyers;
-    }
-    public void setLikedPlyers(List<String> likedPlyers) {
-        this.likedPlyers = likedPlyers;
-    }
-    public List<String> getDislikedPlyers() {
-        return dislikedPlyers;
-    }
-    public void setDislikedPlyers(List<String> dislikedPlyers) {
-        this.dislikedPlyers = dislikedPlyers;
     }
 }
 

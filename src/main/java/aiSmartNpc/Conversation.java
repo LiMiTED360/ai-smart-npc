@@ -1,5 +1,8 @@
 package aiSmartNpc;
 
+import aiSmartNpc.helper.JsonHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Conversation {
@@ -11,48 +14,32 @@ public class Conversation {
     private String urlApi;
     private String aiModel;
 
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
 
-    private boolean inLikedPlayerList;
-    private boolean inDislikedPlayerList;
 
     public Conversation(NPC npc, String playername, String urlApi, String aiModel) {
         this.npc = npc;
         this.playername = playername;
         this.urlApi = urlApi;
         this.aiModel = aiModel;
-
-        inLikedPlayerList = false;
-        inDislikedPlayerList = false;
-
-        for (String player : npc.getLikedPlyers()) {
-            if (player.equals(playername)) {
-                this.inLikedPlayerList = true;
-                break;
-            }
-        }
-
-        for  (String player : npc.getDislikedPlyers()) {
-            if (player.equals(playername)) {
-                this.inDislikedPlayerList = true;
-                break;
-            }
-        }
     }
 
     public Conversation(NPC npc, String urlApi) {
         this.npc = npc;
         this.urlApi = urlApi;
         this.playername = null;
-        inLikedPlayerList = false;
-        inDislikedPlayerList = false;
+    }
+
+    public String messageNPC(String message) {
+        String response = JsonHelper.makeAndSendJason(npc, this,  message);
+        messages.add(new Message(playername, message, false));
+        messages.add(new Message(playername, response, true));
+        return response;
     }
 
     public void end() {
         active = false;
     }
-
-
 
     public boolean isActive() {
         return active;
@@ -60,18 +47,8 @@ public class Conversation {
     public void setActive(boolean active) {
         this.active = active;
     }
-    public boolean isInDislikedPlayerList() {
-        return inDislikedPlayerList;
-    }
-    public void setInDislikedPlayerList(boolean inDislikedPlayerList) {
-        this.inDislikedPlayerList = inDislikedPlayerList;
-    }
-    public boolean isInLikedPlayerList() {
-        return inLikedPlayerList;
-    }
-    public void setInLikedPlayerList(boolean inLikedPlayerList) {
-        this.inLikedPlayerList = inLikedPlayerList;
-    }
+
+
     public List<Message> getMessages() {
         return messages;
     }
