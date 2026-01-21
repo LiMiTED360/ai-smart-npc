@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static aiSmartNpc.helper.ExtractHelper.cleanUpMessage;
+
 public class Conversation {
     private boolean active = true;
 
@@ -32,6 +34,7 @@ public class Conversation {
     }
 
     public String messageNPC(String message) {
+        message = cleanUpMessage(message);
         String response = JsonHelper.makeAndSendJason(npc, this,  message);
         messages.add(new Message(playername, message, false));
         messages.add(new Message(playername, response, true));
@@ -50,27 +53,9 @@ public class Conversation {
         }
 
 
-        if (response.contains("[") || response.contains("]")) {
-            System.out.println(response);
-            boolean save = true;
-            List<Character> chars = new LinkedList<>();
 
-            for (char letter :  response.toCharArray()) {
-                if (letter == '[') {
-                    save = false;
-                }
-                if (save) {
-                    chars.add(letter);
-                }
-                if (letter == ']') {
-                    save = true;
-                }
 
-            }
-            response = chars.toString();
-        }
-
-        return response;
+        return cleanUpMessage(response);
     }
 
     public void end() {

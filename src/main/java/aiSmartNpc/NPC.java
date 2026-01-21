@@ -32,6 +32,10 @@ public class NPC {
         return new NPC (name, cusomMood, descriptionNPC, descriptionLocation, descriptionTask);
     }
 
+    public void addTrigger(Trigger trigger) {
+        triggers.add(trigger);
+    }
+
     public Conversation startConversation(String playerName, String url, String aiModel) {
         return new Conversation(this, playerName, url, aiModel);
     }

@@ -1,11 +1,13 @@
 package aiSmartNpc;
 
+import static aiSmartNpc.helper.ExtractHelper.cleanUpMessage;
+
 public class Message {
     private String message;
     private boolean fromAI;
 
     public Message(String username, String message, boolean fromAI) {
-        this.message = message;
+        this.message = cleanUpMessage(message);
         this.fromAI = fromAI;
     }
 

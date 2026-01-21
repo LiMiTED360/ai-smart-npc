@@ -19,7 +19,7 @@ public class ExtractHelper {
         }
 
         if (foundContent != null) {
-            return cleanUpAnswer(foundContent) + "[Test]";
+            return cleanUpAnswer(foundContent);
         }
 
         return "[error] Could not understand response, DEBUG - Could not read JSON: " + jsonResponse;
@@ -36,6 +36,15 @@ public class ExtractHelper {
                 .replace("\\u00fc", "ü")
                 .replace("\\u00dc", "Ü")
                 .replace("\\u00df", "ß");
+    }
+
+    public static String cleanUpMessage(String message) {
+        message = message.replaceAll("(?i)\\*\\*TRIGGER:.*?\\*\\*", "");
+        message = message.replaceAll("\\[.*?\\]", "");
+        message = message.replaceAll("\\*.*?\\*", "");
+        message = message.replaceAll("\\(.*?\\)", "");
+
+        return message;
     }
 
 
