@@ -50,7 +50,6 @@ public class JsonHelper {
 
         String json = makeJson(npc, conversation, newMessage);
 
-        System.out.println(json);
 
         try {
             HttpResponse<String> response = HttpHelper.sendHttpRequest(json, conversation.getUrlApi());

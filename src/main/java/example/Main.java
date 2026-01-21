@@ -29,7 +29,7 @@ public class Main {
         ));
 
 
-        Conversation conversation = gatekeeper.startConversation("LiMiTED360", "http://localhost:1234/v1/chat/completions", "llama-3-14b-instruct-v1");
+        Conversation conversation = gatekeeper.startConversation("LiMiTED360", "http://localhost:1234/v1/chat/completions", "llama-3.2-3b-instruct");
 
         String input = "";
         Scanner scanner = new Scanner(System.in);

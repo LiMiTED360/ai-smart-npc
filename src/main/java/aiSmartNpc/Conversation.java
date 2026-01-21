@@ -3,6 +3,7 @@ package aiSmartNpc;
 import aiSmartNpc.helper.JsonHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Conversation {
@@ -34,6 +35,41 @@ public class Conversation {
         String response = JsonHelper.makeAndSendJason(npc, this,  message);
         messages.add(new Message(playername, message, false));
         messages.add(new Message(playername, response, true));
+        return stardTrigger(response);
+    }
+
+    private String stardTrigger(String response) {
+        String lowerResponse = response.toLowerCase();
+
+        for (Trigger trigger : npc.getTriggers()) {
+            if (lowerResponse.contains(trigger.getCommand().toLowerCase())) {
+                response = response.replace(trigger.getCommand(), "");
+                trigger.getOnActivation().run();
+                break;
+            }
+        }
+
+
+        if (response.contains("[") || response.contains("]")) {
+            System.out.println(response);
+            boolean save = true;
+            List<Character> chars = new LinkedList<>();
+
+            for (char letter :  response.toCharArray()) {
+                if (letter == '[') {
+                    save = false;
+                }
+                if (save) {
+                    chars.add(letter);
+                }
+                if (letter == ']') {
+                    save = true;
+                }
+
+            }
+            response = chars.toString();
+        }
+
         return response;
     }
 

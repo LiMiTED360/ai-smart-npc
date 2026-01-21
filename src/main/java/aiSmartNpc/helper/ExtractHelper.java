@@ -19,7 +19,7 @@ public class ExtractHelper {
         }
 
         if (foundContent != null) {
-            return cleanUpAnswer(foundContent);
+            return cleanUpAnswer(foundContent) + "[Test]";
         }
 
         return "[error] Could not understand response, DEBUG - Could not read JSON: " + jsonResponse;
