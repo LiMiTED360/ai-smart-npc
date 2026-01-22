@@ -34,14 +34,17 @@ public class Conversation {
     }
 
     public String messageNPC(String message) {
-        message = cleanUpMessage(message);
-        String response = JsonHelper.makeAndSendJason(npc, this,  message);
-        messages.add(new Message(playername, message, false));
-        messages.add(new Message(playername, response, true));
-        return stardTrigger(response);
+        if (active) {
+            message = cleanUpMessage(message);
+            String response = JsonHelper.makeAndSendJson(npc, this,  message);
+            messages.add(new Message(playername, message, false));
+            messages.add(new Message(npc.getName(), response, true));
+            return startTrigger(response);
+        }
+        return "[Error], chat ended already";
     }
 
-    private String stardTrigger(String response) {
+    private String startTrigger(String response) {
         String lowerResponse = response.toLowerCase();
 
         for (Trigger trigger : npc.getTriggers()) {

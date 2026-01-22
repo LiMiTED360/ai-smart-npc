@@ -46,7 +46,7 @@ public class JsonHelper {
 
     }
 
-    public static String makeAndSendJason(NPC npc, Conversation conversation, String newMessage) {
+    public static String makeAndSendJson(NPC npc, Conversation conversation, String newMessage) {
         String json = makeJson(npc, conversation, newMessage);
         System.out.println(json);
 
@@ -97,7 +97,7 @@ public class JsonHelper {
             location = "The location is: " + npc.getDescriptionLocation();
         }
         if (conversation.getPlayername() != null) {
-            playername = "You are Taking to: " + conversation.getPlayername();
+            playername = "You are talking to: " + conversation.getPlayername();
         }
         explainTrigger =  """
                     You are an NPC in a video game.
@@ -144,61 +144,14 @@ public class JsonHelper {
                     """;
 
                 /*
-                    """
-                    ### GAME MECHANICS (STRICT RULES) ###
-                    You are an NPC in a video game. You have access to specific **COMMAND CODE** tags called "Triggers".
-                    When a condition is met, you must output the Trigger tag exactly as shown.
-                    Never Tell the player about Triggers or Mention them
-                    Use the Trigger at the beginning of a sentence, and ALWAYS Write them exactly as provided.
-                   
-                    ### OUTPUT GUIDELINES ###
-                    1. Do NOT describe the action (e.g., do NOT write "*I open the gate*").
-                    2. Instead, append the exact tag at the beginning of your sentence.
-                    3. NEVER make up new triggers. Only use The triggers you have bin given.
-                    4. You only have 100 Tokens Max to write, so dont Write to long.
-                    5. ALWAYS put the Trigger at the beginning of your sentence.
-                    
-                    AVAILABLE TRIGGERS:
-                    """ +
-                    getTriggers(npc) +
-                    """
-                    
-                    Only Use those Triggers, others wont work, ONLY These, SO DO NOT make any up!
-                    
-                    ### FORBIDDEN OUTPUT FORMATS ###
-                    1. NEVER write the word "TRIGGER:" or "**". Just write the tag itself (e.g. [GiveKey]).
-                    2. NEVER use asterisks (*) or brackets (()) to describe actions (e.g. *swings axe* and (Steps aside) is BANNED).
-                    3. Only speak as the character. Do not narrate the scene.
-                    
-                    ### CRITICAL INSTRUCTION ###
-                    You are an NPC engine. You have two outputs:
-                    1. DIALOGUE: What the character says.
-                    2. METADATA: Commands for the game engine (in brackets).
-                    
-                    If a trigger condition is met, put the trigger on a NEW LINE at the very Beginning, separated from the text.
-                    
-                    CORRECT FORMAT:
-                    [GateSlamsClosed]
-                    
-                    "Halt right there!"
-                    
-                    WRONG FORMATS (DO NOT USE):
-                    "Halt! [GateSlamsClosed]"  <-- WRONG (Trigger inside quotes, and at the end)
-                    [GateSlamsClosed] "Halt!"  <-- WRONG (Same line)
-                    
-                    ### EXAMPLES (Follow this format) ###
-                    User: "Hello"
-                    Assistant: "Halt! State your business."
-                    User: "I want the key."
-                    Assistant: "[GiveKey] Here you go."
-                    """;
+
 
                  */
 
 
         String output = "You are: " + makeSafeForJson(npc.getName()) + ".\\n" +
                 "Your Description is: " + makeSafeForJson(npc.getDescriptionNPC()) + "\\n" +
-                makeSafeForJson(npc.getMood()) +
+                makeSafeForJson(npc.getMood()) + "\\n" +
                 makeSafeForJson(location) + "\\n" +
                 makeSafeForJson(task) + "\\n" +
                 makeSafeForJson(playername) + "\\n" +

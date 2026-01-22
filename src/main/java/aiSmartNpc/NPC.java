@@ -25,7 +25,7 @@ public class NPC {
     }
 
     public static NPC makeNormalNPC(String name, Mood mood, String description, String descriptionTask) {
-        return new NPC(name, mood.getDescription(), description, descriptionTask, null);
+        return new NPC(name, mood.getDescription(), description, null, descriptionTask);
     }
 
     private static NPC makeDetailedNPC(String name, String cusomMood, String descriptionNPC, String descriptionTask, String descriptionLocation) {

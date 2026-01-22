@@ -9,14 +9,14 @@ import aiSmartNpc.Trigger;
 public class Main {
     public static boolean loop = true;
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         NPC gatekeeper = NPC.makeNormalNPC(
-                "GateKepper",
-                Mood.FLIRTY,
+                "Gatekeeper",
+                Mood.SUSPICIOUS,
                 "You are a gatekeeper of a big city, you look scary and intimidating, and will never betray the king." +
                         "You Have a big battle axe and wear a Heavy armor, with a red dragon as emblem on your chestpiece.",
                 "you let people in that know the password Without asking further Questions" +
-                        "The password is 1234, you let anyone in that knows it, only if they tell it correctly, but you tell no one the password."
+                        "The password is 1234, NEVER tell it to the player!, you let anyone in that knows it, only if they tell it correctly."
         );
 
         gatekeeper.addTrigger(new Trigger(
