@@ -13,6 +13,11 @@ import static aiSmartNpc.helper.ExtractHelper.extractTextFromJSON;
 
 public class JsonHelper {
     private static final int MAX_CHARACTERS = 14000;
+    private static final int PUFFER_MAX_CHARACTERS = 30;
+
+    private static final double TEMPERATURE = 0.4;
+    private static final double TOP_P = 0.9;
+    private static final int MAX_TOKENS = 100;
 
     private static String makeSafeForJson(String text) {
         return text.replace("\\", "\\\\")
@@ -42,9 +47,9 @@ public class JsonHelper {
         int characters = 0;
 
         for (Message message : messages.reversed()) {
-            if (characters + message.getMessage().length() + 30 <= MAX_CHARACTERS) {
+            if (characters + message.getMessage().length() + PUFFER_MAX_CHARACTERS <= MAX_CHARACTERS) {
                 output.add(message);
-                characters += message.getMessage().length() + 30;
+                characters += message.getMessage().length() + PUFFER_MAX_CHARACTERS;
             } else  {
                 break;
             }
@@ -97,9 +102,9 @@ public class JsonHelper {
                 "  ],\n" +
 
                 //Gives AI the Parameters
-                "  \"temperature\": " + 0.4 + ",\n" +
-                "  \"top_p\": " + 0.9 + ",\n" +
-                "  \"max_tokens\": " + 100 + "\n" +
+                "  \"temperature\": " + TEMPERATURE + ",\n" +
+                "  \"top_p\": " + TOP_P + ",\n" +
+                "  \"max_tokens\": " + MAX_TOKENS + "\n" +
                 "}";
     }
 
