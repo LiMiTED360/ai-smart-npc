@@ -3,6 +3,7 @@ package aiSmartNpc.helper;
 import aiSmartNpc.*;
 
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,6 +12,8 @@ import java.util.regex.Pattern;
 import static aiSmartNpc.helper.ExtractHelper.extractTextFromJSON;
 
 public class JsonHelper {
+    private static final int MAX_CHARACTERS = 14000;
+
     private static String makeSafeForJson(String text) {
         return text.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
@@ -20,6 +23,7 @@ public class JsonHelper {
     }
 
     private static String makeContextForJson(List<Message> messages) {
+        messages = makeContextLength(messages);
         StringBuilder output = new StringBuilder();
 
         for (Message message : messages) {
@@ -31,6 +35,21 @@ public class JsonHelper {
         }
 
         return output.toString();
+    }
+
+    private static List<Message> makeContextLength(List<Message> messages) {
+        List<Message> output = new ArrayList<>();
+        int characters = 0;
+
+        for (Message message : messages.reversed()) {
+            if (characters + message.getMessage().length() + 30 <= MAX_CHARACTERS) {
+                output.add(message);
+                characters += message.getMessage().length() + 30;
+            } else  {
+                break;
+            }
+        }
+        return output.reversed();
     }
 
     private static String getTriggers(NPC npc) {
@@ -106,7 +125,8 @@ public class JsonHelper {
                     ### CRITICAL RULES ###
                     1. **POSITION:** If you use a Trigger, it MUST be the VERY FIRST thing you write.
                     2. **FORMAT:** Put the Trigger on its own line. Then write the dialogue on the next line.
-                    4. **LENGTH:** Keep responses short (under 100 tokens).
+                    3. **LENGTH:** Keep responses short (under 100 tokens).
+                    4. **VERIFICATION:** Before using a Trigger, verify the condition.
                     
                     ### FORBIDDEN OUTPUT FORMATS ###
                     1. NEVER write the word "TRIGGER:" or "**". Just write the tag itself (e.g. [GiveKey]).
@@ -118,11 +138,12 @@ public class JsonHelper {
                     - Use them ONLY when the condition is met.
                     - NEVER invent new triggers.
                     - EXACT SPELLING is required.
+                    - you DO NOT have to use the triggrs, only use them when needed
                     
                     AVAILABLE TRIGGERS:
                     """ + getTriggers(npc) + """
                     
-                    Only Use those Triggers, others wont work, ONLY These, SO DO NOT make any up!
+                    Only Use those Triggers when needet, others wont work, ONLY These, SO DO NOT make any up!
                     
                     ### OUTPUT FORMAT EXAMPLES ###
                     

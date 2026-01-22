@@ -21,7 +21,10 @@ public class Main {
 
         gatekeeper.addTrigger(new Trigger(
                 "[LetIn]",
-                "Use this ONLY when the password 1234 is spoken.",
+
+                "TRIGGER RULE: Only use this if the user message contains the number '1234'. " +
+                        "If the user just asks to enter but does NOT say '1234', DO NOT use this trigger. " +
+                        "Instead, ask for the password",
                 () -> {
                     System.out.println("**Player got in!**");
                     Main.loop = false;
@@ -38,7 +41,7 @@ public class Main {
         ));
 
 
-        Conversation conversation = gatekeeper.startConversation("LiMiTED360", "http://localhost:1234/v1/chat/completions", "upstage-llama-30b-instruct-2048");
+        Conversation conversation = gatekeeper.startConversation("LiMiTED360", "http://localhost:1234/v1/chat/completions", "qwen_qwen3-30b-a3b-instruct-2507");
 
         String input = "";
         Scanner scanner = new Scanner(System.in);
