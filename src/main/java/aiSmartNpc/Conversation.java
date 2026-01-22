@@ -33,6 +33,7 @@ public class Conversation {
         this.playername = null;
     }
 
+    //Used to message the NPC
     public String messageNPC(String message) {
         if (active) {
             message = cleanUpMessage(message);
@@ -44,6 +45,7 @@ public class Conversation {
         return "[Error], chat ended already";
     }
 
+    //Checks for any triggers that the AI tried to use
     private String startTrigger(String response) {
         String lowerResponse = response.toLowerCase();
 
@@ -54,13 +56,10 @@ public class Conversation {
                 break;
             }
         }
-
-
-
-
         return cleanUpMessage(response);
     }
 
+    //Ends a conversation
     public void end() {
         active = false;
     }
@@ -71,8 +70,6 @@ public class Conversation {
     public void setActive(boolean active) {
         this.active = active;
     }
-
-
     public List<Message> getMessages() {
         return messages;
     }

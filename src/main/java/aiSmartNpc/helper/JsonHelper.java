@@ -4,21 +4,19 @@ import aiSmartNpc.*;
 
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static aiSmartNpc.helper.ExtractHelper.extractTextFromJSON;
 
 public class JsonHelper {
     private static final int MAX_CHARACTERS = 14000;
-    private static final int PUFFER_MAX_CHARACTERS = 30;
+    private static final int BUFFER_MAX_CHARACTERS = 30;
 
     private static final double TEMPERATURE = 0.4;
     private static final double TOP_P = 0.9;
     private static final int MAX_TOKENS = 100;
 
+    //Makes text safe for JSON so it won't cause problems
     private static String makeSafeForJson(String text) {
         return text.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
@@ -42,14 +40,15 @@ public class JsonHelper {
         return output.toString();
     }
 
+    //Makes sure the Context size does not go over 4K Tokens
     private static List<Message> makeContextLength(List<Message> messages) {
         List<Message> output = new ArrayList<>();
         int characters = 0;
 
         for (Message message : messages.reversed()) {
-            if (characters + message.getMessage().length() + PUFFER_MAX_CHARACTERS <= MAX_CHARACTERS) {
+            if (characters + message.getMessage().length() + BUFFER_MAX_CHARACTERS <= MAX_CHARACTERS) {
                 output.add(message);
-                characters += message.getMessage().length() + PUFFER_MAX_CHARACTERS;
+                characters += message.getMessage().length() + BUFFER_MAX_CHARACTERS;
             } else  {
                 break;
             }
@@ -57,6 +56,7 @@ public class JsonHelper {
         return output.reversed();
     }
 
+    //Returns string telling the AI all its available triggers and their description
     private static String getTriggers(NPC npc) {
 
         if (npc.getTriggers() != null && !npc.getTriggers().isEmpty()) {
@@ -87,11 +87,12 @@ public class JsonHelper {
         }
     }
 
+    //Assembles JSON
     private static String makeJson(NPC npc, Conversation conversation, String newMessage) {
         return  "{\n" +
                 "  \"model\": \"" + conversation.getAiModel() + "\",\n" +
                 "  \"messages\": [\n" +
-                "    {\"role\": \"system\", \"content\": \"" + getSystempromt(npc, conversation) + "\"},\n" +
+                "    {\"role\": \"system\", \"content\": \"" + getSystemprompt(npc, conversation) + "\"},\n" +
 
                 //Adds Context for the AI
                 makeContextForJson(conversation.getMessages()) +
@@ -108,7 +109,7 @@ public class JsonHelper {
                 "}";
     }
 
-    private static String getSystempromt(NPC npc, Conversation conversation) {
+    private static String getSystemprompt(NPC npc, Conversation conversation) {
         String task = "";
         String location = "";
         String playername = "";
@@ -143,12 +144,12 @@ public class JsonHelper {
                     - Use them ONLY when the condition is met.
                     - NEVER invent new triggers.
                     - EXACT SPELLING is required.
-                    - you DO NOT have to use the triggrs, only use them when needed
+                    - you DO NOT have to use the triggers, only use them when needed
                     
                     AVAILABLE TRIGGERS:
                     """ + getTriggers(npc) + """
                     
-                    Only Use those Triggers when needet, others wont work, ONLY These, SO DO NOT make any up!
+                    Only Use those Triggers when needed, others won't work, ONLY These, SO DO NOT make any up!
                     
                     ### OUTPUT FORMAT EXAMPLES ###
                     
@@ -168,11 +169,6 @@ public class JsonHelper {
                     
                     ### NOW BEGIN ###
                     """;
-
-                /*
-
-
-                 */
 
 
         String output = "You are: " + makeSafeForJson(npc.getName()) + ".\\n" +

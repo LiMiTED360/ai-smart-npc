@@ -14,15 +14,12 @@ public class Message {
     public String getMessage() {
         return message;
     }
-
     public void setMessage(String message) {
         this.message = message;
     }
-
     public boolean isFromAI() {
         return fromAI;
     }
-
     public void setFromAI(boolean fromAI) {
         this.fromAI = fromAI;
     }
