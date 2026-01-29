@@ -16,6 +16,7 @@ public class Conversation {
 
     private String urlApi;
     private String aiModel;
+    private AIConfig aiConfig;
 
     private List<Message> messages = new ArrayList<>();
 
@@ -25,6 +26,15 @@ public class Conversation {
         this.playername = playername;
         this.urlApi = urlApi;
         this.aiModel = aiModel;
+        this.aiConfig = new AIConfig();
+    }
+
+    public Conversation(NPC npc, String playername, String urlApi, String aiModel, AIConfig aiConfig) {
+        this.npc = npc;
+        this.playername = playername;
+        this.urlApi = urlApi;
+        this.aiModel = aiModel;
+        this.aiConfig = aiConfig;
     }
 
     public Conversation(NPC npc, String urlApi) {
@@ -99,5 +109,11 @@ public class Conversation {
     }
     public void setPlayername(String playername) {
         this.playername = playername;
+    }
+    public AIConfig getAiConfig() {
+        return aiConfig;
+    }
+    public void setAiConfig(AIConfig aiConfig) {
+        this.aiConfig = aiConfig;
     }
 }

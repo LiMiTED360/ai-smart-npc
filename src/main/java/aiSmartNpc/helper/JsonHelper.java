@@ -9,12 +9,6 @@ import java.util.List;
 import static aiSmartNpc.helper.ExtractHelper.extractTextFromJSON;
 
 public class JsonHelper {
-    private static final int MAX_CHARACTERS = 14000;
-    private static final int BUFFER_MAX_CHARACTERS = 30;
-
-    private static final double TEMPERATURE = 0.4;
-    private static final double TOP_P = 0.9;
-    private static final int MAX_TOKENS = 100;
 
     //Makes text safe for JSON so it won't cause problems
     private static String makeSafeForJson(String text) {
@@ -25,8 +19,8 @@ public class JsonHelper {
                 .replace("\t", "\\t");
     }
 
-    private static String makeContextForJson(List<Message> messages) {
-        messages = makeContextLength(messages);
+    private static String makeContextForJson(List<Message> messages, AIConfig aiConfig) {
+        messages = makeContextLength(messages, aiConfig);
         StringBuilder output = new StringBuilder();
 
         for (Message message : messages) {
@@ -41,14 +35,14 @@ public class JsonHelper {
     }
 
     //Makes sure the Context size does not go over 4K Tokens
-    private static List<Message> makeContextLength(List<Message> messages) {
+    private static List<Message> makeContextLength(List<Message> messages, AIConfig aiConfig) {
         List<Message> output = new ArrayList<>();
         int characters = 0;
 
         for (Message message : messages.reversed()) {
-            if (characters + message.getMessage().length() + BUFFER_MAX_CHARACTERS <= MAX_CHARACTERS) {
+            if (characters + message.getMessage().length() + aiConfig.getBufferMaxCharacters() <= aiConfig.getMaxCharacters()) {
                 output.add(message);
-                characters += message.getMessage().length() + BUFFER_MAX_CHARACTERS;
+                characters += message.getMessage().length() + aiConfig.getBufferMaxCharacters();
             } else  {
                 break;
             }
@@ -95,7 +89,7 @@ public class JsonHelper {
                 "    {\"role\": \"system\", \"content\": \"" + getSystemprompt(npc, conversation) + "\"},\n" +
 
                 //Adds Context for the AI
-                makeContextForJson(conversation.getMessages()) +
+                makeContextForJson(conversation.getMessages(), conversation.getAiConfig()) +
 
 
                 //Adds new message for the AI
@@ -103,9 +97,9 @@ public class JsonHelper {
                 "  ],\n" +
 
                 //Gives AI the Parameters
-                "  \"temperature\": " + TEMPERATURE + ",\n" +
-                "  \"top_p\": " + TOP_P + ",\n" +
-                "  \"max_tokens\": " + MAX_TOKENS + "\n" +
+                "  \"temperature\": " + conversation.getAiConfig().getTemperature() + ",\n" +
+                "  \"top_p\": " + conversation.getAiConfig().getTopP() + ",\n" +
+                "  \"max_tokens\": " + conversation.getAiConfig().getMaxTokens() + "\n" +
                 "}";
     }
 
